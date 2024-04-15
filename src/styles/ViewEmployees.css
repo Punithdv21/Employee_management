@@ -1,5 +1,3 @@
-/* ViewEmployees.css */
-
 /* Container styling */
 .view-employees-container {
   max-width: 800px;
@@ -24,6 +22,7 @@
 .employee-table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
 }
 
 /* Table header row styling */
@@ -56,7 +55,7 @@
 }
 
 /* Delete button styling */
-.employee-row button.delete {
+.employee-row button:last-child {
   background-color: #dc3545;
 }
 
