@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/ViewEmployees.css';
 
-const ViewEmployees = ({ handleUpdateEmployee, handleDeleteEmployee }) => {
+const ViewEmployees = ({ handleDeleteEmployee, userRole }) => {
   const [employees, setEmployees] = useState([]);
   const [error, setError] = useState('');
 
@@ -65,6 +65,8 @@ const ViewEmployees = ({ handleUpdateEmployee, handleDeleteEmployee }) => {
     }
   };
 
+  console.log('User Role:', userRole); // Logging user role
+
   return (
     <div className="view-employees-container">
       <h2 className="view-employees-heading">Employees</h2>
@@ -76,7 +78,7 @@ const ViewEmployees = ({ handleUpdateEmployee, handleDeleteEmployee }) => {
             <th>Last Name</th>
             <th>Designation</th>
             <th>Salary</th>
-            <th>Actions</th>
+            {(userRole === 'ROLE_ADMIN' || userRole === 'ROLE_MODERATOR') && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -158,17 +160,31 @@ const ViewEmployees = ({ handleUpdateEmployee, handleDeleteEmployee }) => {
                   employee.salary
                 )}
               </td>
-              <td>
-                {employee.edit ? (
-                  <div>
-                    <button onClick={() => handleUpdate(employee.id, employee)}>Save</button>
-                    <button onClick={() => setEmployees(employees.map(emp => emp.id === employee.id ? { ...emp, edit: false } : emp))}>Cancel</button>
-                  </div>
-                ) : (
-                  <button onClick={() => setEmployees(employees.map(emp => emp.id === employee.id ? { ...emp, edit: true } : emp))}>Edit</button>
-                )}
-                <button onClick={() => handleDelete(employee.id)}>Delete</button>
-              </td>
+              {(userRole === 'ROLE_ADMIN') && (
+                <td>
+                  {employee.edit ? (
+                    <div>
+                      <button onClick={() => handleUpdate(employee.id, employee)}>Save</button>
+                      <button onClick={() => setEmployees(employees.map(emp => emp.id === employee.id ? { ...emp, edit: false } : emp))}>Cancel</button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setEmployees(employees.map(emp => emp.id === employee.id ? { ...emp, edit: true } : emp))}>Edit</button>
+                  )}
+                  {userRole === 'ROLE_ADMIN' && <button onClick={() => handleDelete(employee.id)}>Delete</button>}
+                </td>
+              )}
+              {userRole === 'ROLE_MODERATOR' && (
+                <td>
+                  {employee.edit ? (
+                    <div>
+                      <button onClick={() => handleUpdate(employee.id, employee)}>Save</button>
+                      <button onClick={() => setEmployees(employees.map(emp => emp.id === employee.id ? { ...emp, edit: false } : emp))}>Cancel</button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setEmployees(employees.map(emp => emp.id === employee.id ? { ...emp, edit: true } : emp))}>Edit</button>
+                  )}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
