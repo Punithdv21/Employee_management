@@ -17,14 +17,9 @@ const HomePage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
-  const handleDeleteEmployee = (employee) => {
-    // Implement delete functionality here
-    console.log('Delete employee:', employee);
-  };
-
-  const fetchEmployees = () => {
-    // Implement fetching employees functionality here
-    console.log('Fetching employees...');
+  const handleLogin = (role) => {
+    setUserRole(role);
+    setLoggedIn(true);
   };
 
   const handleLogout = () => {
@@ -67,7 +62,7 @@ const HomePage = () => {
       )}
       {!loggedIn ? (
         <div>
-          {showLoginForm && <LoginForm setUserRole={setUserRole} setLoggedIn={setLoggedIn} />}
+          {showLoginForm && <LoginForm setUserRole={handleLogin} setLoggedIn={setLoggedIn} />}
           {showSignupForm && <Signup />}
           {!showLoginForm && !showSignupForm && (
             <div className="welcome-message">
@@ -82,7 +77,7 @@ const HomePage = () => {
             <button onClick={handleViewEmployees}>View Employees</button>
             {userRole === 'ROLE_ADMIN' && <button onClick={handleAddEmployee}>Add Employee</button>}
           </div>
-          {showViewEmployees && <ViewEmployees handleDeleteEmployee={handleDeleteEmployee} fetchEmployees={fetchEmployees} />}
+          {showViewEmployees && <ViewEmployees handleDeleteEmployee={() => {}} fetchEmployees={() => {}} userRole={userRole} />}
           {showAddEmployee && <AddEmployee showAlert={setShowAlert} />}
           {showAlert && (
             <div className="alert-message">
